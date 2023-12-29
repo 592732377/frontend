@@ -147,14 +147,17 @@ module.exports.babelOptions = ({ latestBuild, isProdBuild, isTestBuild }) => ({
   overrides: [
     {
       // Add plugin to inject various polyfills, excluding the polyfills
-      // themselves to prevent self- injection.
+      // themselves to prevent self-injection.
       plugins: [
         [
           path.join(BABEL_PLUGINS, "custom-polyfill-plugin.js"),
           { method: "usage-global" },
         ],
       ],
-      exclude: /\/node_modules\/(?:unfetch|proxy-polyfill)\//,
+      exclude: [
+        path.join(paths.polymer_dir, "src/resources/polyfills"),
+        /\/node_modules\/(?:@formatjs\/intl-\w+|unfetch|proxy-polyfill)\//,
+      ],
     },
     {
       // Use unambiguous for dependencies so that require() is correctly injected into CommonJS files
